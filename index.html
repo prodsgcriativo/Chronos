@@ -6,7 +6,7 @@
     <style>
         body { background-color: #020617; color: #f8fafc; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 20px; display: flex; justify-content: center; gap: 20px; }
         .container { width: 100%; max-width: 430px; background-color: #0f172a; border: 1px solid #1e293b; padding: 25px; border-radius: 16px; box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.5); height: fit-content; }
-        .chat-container { width: 100%; max-width: 450px; background-color: #0f172a; border: 1px solid #1e293b; padding: 20px; border-radius: 16px; box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.5); display: flex; flex-direction: column; height: 600px; }
+        .chat-container { width: 100%; max-width: 450px; background-color: #0f172a; border: 1px solid #1e293b; padding: 20px; border-radius: 16px; box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.5); display: flex; flex-direction: column; height: 650px; }
         h1 { font-size: 18px; font-weight: 900; margin: 0 0 5px 0; color: #f1f5f9; }
         .subtitle { font-size: 11px; font-family: monospace; color: #22d3ee; letter-spacing: 2px; margin-bottom: 20px; text-transform: uppercase; }
         .section-title { font-size: 12px; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 15px; letter-spacing: 1px; }
@@ -23,6 +23,7 @@
         .bg-franca { background-color: #06b6d4; }
         .bg-empate { background-color: #f59e0b; }
         .bg-iraque { background-color: #10b981; }
+        
         .chat-messages { flex: 1; overflow-y: auto; background-color: #020617; border: 1px solid #1e293b; border-radius: 12px; padding: 12px; margin-bottom: 10px; font-size: 13px; display: flex; flex-direction: column; gap: 10px; }
         .msg { padding: 10px 14px; border-radius: 12px; max-width: 85%; font-size: 13px; line-height: 1.4; word-wrap: break-word; }
         .msg-system { background-color: #1e293b; color: #e2e8f0; align-self: flex-start; border-left: 3px solid #22d3ee; }
@@ -62,18 +63,25 @@
 
 <div class="chat-container">
     <h1>TERMINAL DE COMUNICAÇÃO AI</h1>
-    <div class="subtitle">Análise Tática Local Ativa</div>
+    <div class="subtitle">Conexão Ativa via API Exclusiva</div>
+    
+    <!-- CAIXA DA CHAVE API RETORNADA COM SUCESSO -->
+    <div class="input-group" style="margin-bottom: 10px;">
+        <input type="password" id="api-key" class="chat-input" placeholder="Cole aqui sua API Key do Google AI Studio">
+    </div>
 
     <div class="chat-messages" id="chat-box">
-        <div class="msg msg-system"><b>Chronos AI:</b> Canal privado ativado. Digite sua pergunta abaixo e clique em Enviar. Eu vou ler os dados do painel esquerdo automaticamente.</div>
+        <div class="msg msg-system"><b>Chronos AI:</b> Canal pareado. Cole a sua chave iniciando em AQ. na caixa de texto acima e me envie um "Olá" para ativarmos o nosso chat inteligente.</div>
     </div>
     <div class="chat-input-area">
         <input type="text" id="chat-in" class="chat-input" placeholder="Fale comigo sobre o jogo..." onkeypress="checarEnter(event)">
-        <button onclick="gerarRespostaLocal()" style="width: auto; margin-top: 0; padding: 10px 15px; background-color:#06b6d4; color:#020617; font-weight:bold; border-radius:8px; border:none; cursor:pointer;">Enviar</button>
+        <button onclick="enviarMensagemAI()" style="width: auto; margin-top: 0; padding: 10px 15px; background-color:#06b6d4; color:#020617; font-weight:bold; border:none; border-radius:8px; cursor:pointer;">Enviar</button>
     </div>
 </div>
 
 <script>
+let historicoConversa = [];
+
 function calcularOndasQuanticas() {
     let min = parseFloat(document.getElementById('minuto').value) || 0;
     let posse = parseFloat(document.getElementById('posse').value) || 50;
@@ -96,9 +104,12 @@ function calcularOndasQuanticas() {
     return { franca: p_a.toFixed(1), empate: p_empate.toFixed(1), iraque: p_b.toFixed(1) };
 }
 
-function gerarRespostaLocal() {
+async function enviarMensagemAI() {
+    let apiKey = document.getElementById('api-key').value.trim();
     let inputCampo = document.getElementById('chat-in');
     let textoUsuario = inputCampo.value.trim();
+    
+    if (!apiKey) { alert("Por favor, insira sua API Key."); return; }
     if (textoUsuario === "") return;
     
     let box = document.getElementById('chat-box');
@@ -108,22 +119,35 @@ function gerarRespostaLocal() {
 
     let probs = calcularOndasQuanticas();
     let min = document.getElementById('minuto').value;
-    let posse = document.getElementById('posse').value;
-    let xg = document.getElementById('xg').value;
+    
+    let url = `https://googleapis.com{apiKey}`;
+    
+    if (historicoConversa.length === 0) {
+        historicoConversa.push({role: "user", parts: [{text: "Você é o parceiro de inteligência artificial do Projeto Chronos. Responda em Português do Brasil de forma extremamente prestativa e inteligente. STATUS DO JOGO ATUAL: Minuto " + min + ", Probabilidade Vitória França: " + probs.franca + "%, Empate: " + probs.empate + "%, Vitória Iraque: " + probs.iraque + "%."}]});
+        historicoConversa.push({role: "model", parts: [{text: "Conexão estabelecida, parceiro. Estou analisando as probabilidades do painel esquerdo. Qual a sua dúvida sobre o jogo?"}]});
+    }
+    
+    historicoConversa.push({role: "user", parts: [{text: textoUsuario}]});
 
-    setTimeout(() => {
-        let analise = `Análise do minuto ${min}': Com a França detendo ${posse}% de posse e xG de ${xg}, a probabilidade de vitória francesa está consolidada em ${probs.franca}%. O Empate retém ${probs.empate}% e o Iraque ${probs.iraque}%. `;
-        if (parseFloat(probs.franca) > 60) {
-            analise += "Recomenda-se manter a posição de favoritismo da França. A linha de pressão indica domínio controlado.";
-        } else {
-            analise += "Atenção ao equilíbrio tático de campo. Cenário propício para variações de volatilidade.";
-        }
-        box.innerHTML += `<div class="msg msg-system"><b>Chronos AI:</b> ${analise}</div>`;
-        box.scrollTop = box.scrollHeight;
-    }, 500);
+    try {
+        let resposta = await fetch(url, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ contents: historicoConversa })
+        });
+        
+        let dados = await resposta.json();
+        let textoAI = dados.candidates[0].content.parts[0].text;
+        
+        historicoConversa.push({role: "model", parts: [{text: textoAI}]});
+        box.innerHTML += `<div class="msg msg-system"><b>Chronos AI:</b> ${textoAI}</div>`;
+    } catch (erro) {
+        box.innerHTML += `<div class="msg msg-system" style="border-left-color: #f87171"><b>Erro de Conexão:</b> Falha ao processar a resposta. Certifique-se de usar a sua chave API completa.</div>`;
+    }
+    box.scrollTop = box.scrollHeight;
 }
 
-function checarEnter(e) { if(e.key === 'Enter') gerarRespostaLocal(); }
+function checarEnter(e) { if(e.key === 'Enter') enviarMensagemAI(); }
 calcularOndasQuanticas();
 </script>
 </body>
