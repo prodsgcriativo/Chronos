@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Chronos Engine v1.0 - Terminal Privado</title>
+    <style>
+        body { background-color: #020617; color: #f8fafc; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 20px; display: flex; justify-content: center; gap: 20px; }
+        .container { width: 100%; max-width: 430px; background-color: #0f172a; border: 1px solid #1e293b; padding: 25px; border-radius: 16px; box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.5); height: fit-content; }
+        .chat-container { width: 100%; max-width: 450px; background-color: #0f172a; border: 1px solid #1e293b; padding: 20px; border-radius: 16px; box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.5); display: flex; flex-direction: column; height: 600px; }
+        h1 { font-size: 18px; font-weight: 900; margin: 0 0 5px 0; color: #f1f5f9; }
+        .subtitle { font-size: 11px; font-family: monospace; color: #22d3ee; letter-spacing: 2px; margin-bottom: 20px; text-transform: uppercase; }
+        .section-title { font-size: 12px; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 15px; letter-spacing: 1px; }
+        .input-group { margin-bottom: 12px; }
+        label { display: block; font-size: 13px; color: #cbd5e1; margin-bottom: 5px; }
+        input { width: 100%; padding: 10px; background-color: #1e293b; border: 1px solid #334155; border-radius: 8px; color: #fff; font-size: 14px; box-sizing: border-box; font-family: monospace; }
+        button { width: 100%; padding: 12px; background-color: #06b6d4; border: none; border-radius: 8px; color: #020617; font-weight: bold; font-size: 14px; cursor: pointer; margin-top: 10px; }
+        button:hover { background-color: #22d3ee; }
+        .result-box { margin-top: 20px; padding: 15px; background-color: #020617; border: 1px solid #1e293b; border-radius: 12px; }
+        .progress-container { margin-bottom: 12px; }
+        .progress-label { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px; font-weight: 600; }
+        .progress-bar { width: 100%; height: 8px; background-color: #1e293b; border-radius: 4px; overflow: hidden; }
+        .progress-fill { height: 100%; width: 0%; transition: width 0.4s ease-out; }
+        .bg-franca { background-color: #06b6d4; }
+        .bg-empate { background-color: #f59e0b; }
+        .bg-iraque { background-color: #10b981; }
+        .chat-messages { flex: 1; overflow-y: auto; background-color: #020617; border: 1px solid #1e293b; border-radius: 12px; padding: 12px; margin-bottom: 10px; font-size: 13px; display: flex; flex-direction: column; gap: 10px; }
+        .msg { padding: 10px 14px; border-radius: 12px; max-width: 85%; font-size: 13px; line-height: 1.4; word-wrap: break-word; }
+        .msg-system { background-color: #1e293b; color: #e2e8f0; align-self: flex-start; border-left: 3px solid #22d3ee; }
+        .msg-user { background-color: #0369a1; color: #fff; align-self: flex-end; }
+        .chat-input-area { display: flex; gap: 8px; }
+        .chat-input { flex-grow: 1; padding: 10px; background-color: #1e293b; border: 1px solid #334155; border-radius: 8px; color: #fff; font-size: 13px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>MONITOR DE ONDAS TEMPORAIS</h1>
+    <div class="subtitle">Chronos Engine v1.0 // Painel Matemático</div>
+    <div class="section-title">Dados Técnicos</div>
+    <div class="input-group"><label>Minuto Atual da Partida</label><input type="number" id="minuto" value="75"></div>
+    <div class="input-group"><label>Posse de Bola da França (%)</label><input type="number" id="posse" value="62"></div>
+    <div class="input-group"><label>Gols Esperados (xG da França)</label><input type="number" id="xg" value="1.95" step="0.01"></div>
+    <div class="input-group"><label>Pressão Territorial (0 a 100)</label><input type="number" id="zona" value="76"></div>
+    <button onclick="calcularOndasQuanticas()">PROCESSAR MATRIZ PREDITIVA</button>
+    
+    <div class="result-box">
+        <div class="section-title">Superposição de Estados</div>
+        <div class="progress-container">
+            <div class="progress-label"><span>França (Estado A)</span><span id="txt-franca" style="color:#06b6d4">0.0%</span></div>
+            <div class="progress-bar"><div id="bar-franca" class="progress-fill bg-franca"></div></div>
+        </div>
+        <div class="progress-container">
+            <div class="progress-label"><span>Empate (Estado E)</span><span id="txt-empate" style="color:#f59e0b">0.0%</span></div>
+            <div class="progress-bar"><div id="bar-empate" class="progress-fill bg-empate"></div></div>
+        </div>
+        <div class="progress-container">
+            <div class="progress-label"><span>Iraque (Estado C)</span><span id="txt-iraque" style="color:#10b981">0.0%</span></div>
+            <div class="progress-bar"><div id="bar-iraque" class="progress-fill bg-iraque"></div></div>
+        </div>
+    </div>
+</div>
+
+<div class="chat-container">
+    <h1>TERMINAL DE COMUNICAÇÃO AI</h1>
+    <div class="subtitle">Análise Tática Local Ativa</div>
+
+    <div class="chat-messages" id="chat-box">
+        <div class="msg msg-system"><b>Chronos AI:</b> Canal privado ativado. Digite sua pergunta abaixo e clique em Enviar. Eu vou ler os dados do painel esquerdo automaticamente.</div>
+    </div>
+    <div class="chat-input-area">
+        <input type="text" id="chat-in" class="chat-input" placeholder="Fale comigo sobre o jogo..." onkeypress="checarEnter(event)">
+        <button onclick="gerarRespostaLocal()" style="width: auto; margin-top: 0; padding: 10px 15px; background-color:#06b6d4; color:#020617; font-weight:bold; border-radius:8px; border:none; cursor:pointer;">Enviar</button>
+    </div>
+</div>
+
+<script>
+function calcularOndasQuanticas() {
+    let min = parseFloat(document.getElementById('minuto').value) || 0;
+    let posse = parseFloat(document.getElementById('posse').value) || 50;
+    let xg = parseFloat(document.getElementById('xg').value) || 0;
+    let zona = parseFloat(document.getElementById('zona').value) || 50;
+    let posseNorm = posse / 100;
+    let theta = zona > 70 ? posseNorm * 1.6 : posseNorm * 0.6;
+    let energia = (xg * 0.44) + (theta * 0.31) - (min * 0.002);
+    let p_empate = Math.max(0.05, 0.33 * (1.0 - Math.abs(energia * 0.15)));
+    let p_a = (1.0 - p_empate) * (1.0 / (1.0 + Math.exp(-energia * 2)));
+    let p_b = 1.0 - p_a - p_empate;
+    let total = p_a + p_empate + p_b;
+    p_a = (p_a / total) * 100; p_empate = (p_empate / total) * 100; p_b = (p_b / total) * 100;
+    document.getElementById('txt-franca').innerText = p_a.toFixed(1) + '%';
+    document.getElementById('bar-franca').style.width = p_a.toFixed(1) + '%';
+    document.getElementById('txt-empate').innerText = p_empate.toFixed(1) + '%';
+    document.getElementById('bar-empate').style.width = p_empate.toFixed(1) + '%';
+    document.getElementById('txt-iraque').innerText = p_b.toFixed(1) + '%';
+    document.getElementById('bar-iraque').style.width = p_b.toFixed(1) + '%';
+    return { franca: p_a.toFixed(1), empate: p_empate.toFixed(1), iraque: p_b.toFixed(1) };
+}
+
+function gerarRespostaLocal() {
+    let inputCampo = document.getElementById('chat-in');
+    let textoUsuario = inputCampo.value.trim();
+    if (textoUsuario === "") return;
+    
+    let box = document.getElementById('chat-box');
+    box.innerHTML += `<div class="msg msg-user"><b>Você:</b> ${textoUsuario}</div>`;
+    inputCampo.value = "";
+    box.scrollTop = box.scrollHeight;
+
+    let probs = calcularOndasQuanticas();
+    let min = document.getElementById('minuto').value;
+    let posse = document.getElementById('posse').value;
+    let xg = document.getElementById('xg').value;
+
+    setTimeout(() => {
+        let analise = `Análise do minuto ${min}': Com a França detendo ${posse}% de posse e xG de ${xg}, a probabilidade de vitória francesa está consolidada em ${probs.franca}%. O Empate retém ${probs.empate}% e o Iraque ${probs.iraque}%. `;
+        if (parseFloat(probs.franca) > 60) {
+            analise += "Recomenda-se manter a posição de favoritismo da França. A linha de pressão indica domínio controlado.";
+        } else {
+            analise += "Atenção ao equilíbrio tático de campo. Cenário propício para variações de volatilidade.";
+        }
+        box.innerHTML += `<div class="msg msg-system"><b>Chronos AI:</b> ${analise}</div>`;
+        box.scrollTop = box.scrollHeight;
+    }, 500);
+}
+
+function checarEnter(e) { if(e.key === 'Enter') gerarRespostaLocal(); }
+calcularOndasQuanticas();
+</script>
+</body>
+</html>
