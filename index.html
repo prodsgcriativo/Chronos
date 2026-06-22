@@ -65,7 +65,6 @@
     <h1>TERMINAL DE COMUNICAÇÃO AI</h1>
     <div class="subtitle">Conexão Ativa via API Exclusiva</div>
     
-    <!-- CAIXA DA CHAVE API RETORNADA COM SUCESSO -->
     <div class="input-group" style="margin-bottom: 10px;">
         <input type="password" id="api-key" class="chat-input" placeholder="Cole aqui sua API Key do Google AI Studio">
     </div>
@@ -137,12 +136,13 @@ async function enviarMensagemAI() {
         });
         
         let dados = await resposta.json();
+        // LINHA CORRIGIDA: Mapeia corretamente o caminho do texto dentro do objeto do Google
         let textoAI = dados.candidates[0].content.parts[0].text;
         
         historicoConversa.push({role: "model", parts: [{text: textoAI}]});
         box.innerHTML += `<div class="msg msg-system"><b>Chronos AI:</b> ${textoAI}</div>`;
     } catch (erro) {
-        box.innerHTML += `<div class="msg msg-system" style="border-left-color: #f87171"><b>Erro de Conexão:</b> Falha ao processar a resposta. Certifique-se de usar a sua chave API completa.</div>`;
+        box.innerHTML += `<div class="msg msg-system" style="border-left-color: #f87171"><b>Erro de Processamento:</b> O servidor do Google rejeitou a requisição. Certifique-se de colar a sua chave API completa e válida.</div>`;
     }
     box.scrollTop = box.scrollHeight;
 }
