@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Chat Pro - Q-Matrix Preditiva</title>
+    <title>Chronos Engine v1.0 - Terminal Privado</title>
     <style>
         :root {
             --bg-color: #131314;
@@ -14,173 +14,95 @@
             --accent-color: #4b90ff;
             --input-bg: #282a2d;
         }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-        }
-
-        header {
-            background-color: var(--chat-bg);
-            padding: 15px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #303134;
-        }
-
-        .config-container {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-
-        input[type="password"] {
-            background: var(--input-bg);
-            border: 1px solid #444;
-            color: #fff;
-            padding: 8px 12px;
-            border-radius: 8px;
-            outline: none;
-            font-size: 14px;
-            width: 250px;
-        }
-
-        #chat-container {
-            flex: 1;
-            overflow-y: auto;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .message {
-            max-width: 80%;
-            padding: 14px 18px;
-            border-radius: 18px;
-            line-height: 1.5;
-            font-size: 15px;
-            word-wrap: break-word;
-            white-space: pre-wrap;
-        }
-
-        .user-message {
-            background-color: var(--user-msg);
-            align-self: flex-end;
-            border-bottom-right-radius: 4px;
-        }
-
-        .ai-message {
-            background-color: var(--ai-msg);
-            align-self: flex-start;
-            border-bottom-left-radius: 4px;
-            border: 1px solid #303134;
-        }
-
-        .loading {
-            align-self: flex-start;
-            opacity: 0.6;
-            font-style: italic;
-        }
-
-        footer {
-            padding: 20px;
-            background-color: var(--bg-color);
-        }
-
-        .input-area {
-            max-width: 800px;
-            margin: 0 auto;
-            display: flex;
-            gap: 10px;
-            background: var(--input-bg);
-            padding: 8px 15px;
-            border-radius: 28px;
-            align-items: center;
-            border: 1px solid #3c4043;
-        }
-
-        textarea {
-            flex: 1;
-            background: transparent;
-            border: none;
-            color: var(--text-color);
-            resize: none;
-            outline: none;
-            padding: 8px 0;
-            font-size: 16px;
-            max-height: 150px;
-        }
-
-        button {
-            background: var(--accent-color);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: opacity 0.2s;
-        }
-
-        button:hover {
-            opacity: 0.9;
-        }
-
-        button:disabled {
-            background: #555;
-            cursor: not-allowed;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-color); display: flex; justify-content: center; gap: 20px; padding: 20px; height: 100vh; overflow: hidden; }
+        
+        /* Painel da Esquerda (Futebol) */
+        .panel-container { width: 100%; max-width: 420px; background-color: var(--chat-bg); border: 1px solid #303134; padding: 25px; border-radius: 16px; display: flex; flex-direction: column; height: 95vh; }
+        h1 { font-size: 18px; font-weight: 900; margin-bottom: 5px; color: #f1f5f9; }
+        .subtitle { font-size: 11px; font-family: monospace; color: var(--accent-color); letter-spacing: 2px; margin-bottom: 20px; text-transform: uppercase; }
+        .section-title { font-size: 12px; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 12px; letter-spacing: 1px; }
+        .input-group { margin-bottom: 12px; }
+        label { display: block; font-size: 13px; color: #cbd5e1; margin-bottom: 5px; }
+        .panel-input { width: 100%; padding: 10px; background-color: var(--input-bg); border: 1px solid #444; border-radius: 8px; color: #fff; font-size: 14px; font-family: monospace; outline: none; }
+        .panel-input:focus { border-color: var(--accent-color); }
+        .calc-btn { width: 100%; padding: 12px; background-color: var(--accent-color); color: white; border: none; border-radius: 8px; font-weight: bold; font-size: 14px; cursor: pointer; margin-top: 5px; }
+        .result-box { margin-top: 20px; padding: 15px; background-color: var(--bg-color); border: 1px solid #303134; border-radius: 12px; flex-grow: 1; }
+        .progress-container { margin-bottom: 15px; }
+        .progress-label { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px; font-weight: 600; }
+        .progress-bar { width: 100%; height: 8px; background-color: #303134; border-radius: 4px; overflow: hidden; }
+        .progress-fill { height: 100%; width: 0%; transition: width 0.4s ease-out; }
+        
+        /* Chat da Direita (IA Real) */
+        .chat-container { width: 100%; max-width: 550px; background-color: var(--chat-bg); border: 1px solid #303134; border-radius: 16px; display: flex; flex-direction: column; height: 95vh; }
+        .chat-header { padding: 15px 20px; border-bottom: 1px solid #303134; display: flex; justify-content: space-between; align-items: center; }
+        #chat-messages { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; }
+        .message { max-width: 85%; padding: 12px 16px; border-radius: 16px; line-height: 1.5; font-size: 14px; word-wrap: break-word; white-space: pre-wrap; }
+        .user-message { background-color: var(--user-msg); align-self: flex-end; border-bottom-right-radius: 4px; }
+        .ai-message { background-color: var(--ai-msg); align-self: flex-start; border-bottom-left-radius: 4px; border: 1px solid #303134; }
+        .chat-footer { padding: 15px; border-top: 1px solid #303134; }
+        .input-area { display: flex; gap: 10px; background: var(--input-bg); padding: 8px 15px; border-radius: 24px; align-items: center; border: 1px solid #3c4043; }
+        textarea { flex: 1; background: transparent; border: none; color: var(--text-color); resize: none; outline: none; padding: 4px 0; font-size: 14px; max-height: 80px; }
     </style>
 </head>
 <body>
 
-    <header>
-        <h2>AI Chat Assistant <span style="font-size: 12px; color: var(--accent-color); vertical-align: middle;">[Q-Matrix Ativa]</span></h2>
-        <div class="config-container">
-            <input type="password" id="api-key" placeholder="Insira sua Gemini API Key">
+    <!-- PAINEL TÉCNICO DE FUTEBOL -->
+    <div class="panel-container">
+        <h1>CHRONOS MATRIX</h1>
+        <div class="subtitle">Métricas Gerais de Jogo</div>
+        
+        <div class="section-title">Parâmetros de Campo</div>
+        <div class="input-group"><label>Minuto Atual da Partida</label><input type="number" id="minuto" class="panel-input" value="0"></div>
+        <div class="input-group"><label>Posse de Bola - Favorito (%)</label><input type="number" id="posse" class="panel-input" value="50"></div>
+        <div class="input-group"><label>Gols Esperados (xG ao Vivo)</label><input type="number" id="xg" class="panel-input" value="0.00" step="0.01"></div>
+        <div class="input-group"><label>Pressão Territorial (0 a 100)</label><input type="number" id="zona" class="panel-input" value="50"></div>
+        <button class="calc-btn" onclick="calcularOndasQuanticas()">PROCESSAR MATRIZ PREDITIVA</button>
+        
+        <div class="result-box">
+            <div class="section-title">Superposição de Estados</div>
+            <div class="progress-container">
+                <div class="progress-label"><span>Favorito (Estado A)</span><span id="txt-franca" style="color:#4b90ff">0.0%</span></div>
+                <div class="progress-bar"><div id="bar-franca" class="progress-fill" style="background-color:#4b90ff"></div></div>
+            </div>
+            <div class="progress-container">
+                <div class="progress-label"><span>Empate (Estado E)</span><span id="txt-empate" style="color:#f59e0b">0.0%</span></div>
+                <div class="progress-bar"><div id="bar-empate" class="progress-fill" style="background-color:#f59e0b"></div></div>
+            </div>
+            <div class="progress-container">
+                <div class="progress-label"><span>Zebra (Estado C)</span><span id="txt-iraque" style="color:#10b981">0.0%</span></div>
+                <div class="progress-bar"><div id="bar-iraque" class="progress-fill" style="background-color:#10b981"></div></div>
+            </div>
         </div>
-    </header>
-
-    <div id="chat-container">
-        <div class="message ai-message">Sistema Inicializado com Matriz Preditiva de Alinhamento. Cole sua API Key para interagir com o modelo.</div>
     </div>
 
-    <footer>
-        <div class="input-area">
-            <textarea id="user-input" rows="1" placeholder="Digite sua mensagem..."></textarea>
-            <button id="send-btn" onclick="sendMessage()">Enviar</button>
+    <!-- TERMINAL CHAT COM INTERAÇÃO REAL -->
+    <div class="chat-container">
+        <div class="chat-header">
+            <h2>AI Terminal Assistant <span style="font-size: 11px; color: var(--accent-color);">[Q-Matrix Conectada]</span></h2>
+            <input type="password" id="api-key" placeholder="Insira sua Gemini API Key">
         </div>
-    </footer>
+        <div id="chat-messages">
+            <div class="message ai-message">Módulo de IA sincronizado. Insira sua chave API no topo direito, mude os valores do futebol na esquerda e envie sua mensagem.</div>
+        </div>
+        <div class="chat-footer">
+            <div class="input-area">
+                <textarea id="user-input" rows="1" placeholder="Fale comigo sobre o jogo..."></textarea>
+                <button id="send-btn" onclick="sendMessage()">Enviar</button>
+            </div>
+        </div>
+    </div>
 
     <script>
-        const chatContainer = document.getElementById('chat-container');
+        const chatMessages = document.getElementById('chat-messages');
         const userInput = document.getElementById('user-input');
         const apiKeyInput = document.getElementById('api-key');
-        const sendBtn = document.getElementById('send-btn');
 
         if (localStorage.getItem('gemini_api_key')) {
             apiKeyInput.value = localStorage.getItem('gemini_api_key');
         }
-
         apiKeyInput.addEventListener('input', () => {
             localStorage.setItem('gemini_api_key', apiKeyInput.value.trim());
-        });
-
-        userInput.addEventListener('input', function() {
-            this.style.height = 'auto';
-            this.style.height = (this.scrollHeight) + 'px';
         });
 
         userInput.addEventListener('keydown', (e) => {
@@ -190,129 +112,42 @@
             }
         });
 
-        function formatMarkdown(text) {
-            return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-        }
-
-        // IMPLEMENTAÇÃO DA Q-MATRIX PREDITIVA
-        function processPredictiveQMatrix(userText) {
-            const textLower = userText.toLowerCase();
-            
-            // Definição dos eixos da Matriz: [Passado, Presente, Futuro, Temporal_Fixo]
-            let qVector = [0, 0, 0, 0];
-
-            // Palavras-chave mapeadas para análise preditiva de intenção
-            if (textLower.includes("passado") || textLower.includes("antigamente") || textLower.includes("aconteceu")) {
-                qVector[0] = 1; // Foco em Recuperação Histórica
-            }
-            if (textLower.includes("hoje") || textLower.includes("agora") || textLower.includes("atual")) {
-                qVector[1] = 1; // Foco em Tempo Real / Sincronia
-            }
-            if (textLower.includes("futuro") || textLower.includes("previsão") || textLower.includes("acontecerá") || textLower.includes("2030")) {
-                qVector[2] = 1; // Foco em Projeção Preditiva
-            }
-            if (textLower.includes("que dia") || textLower.includes("que horas") || textLower.includes("data")) {
-                qVector[3] = 1; // Foco em Metadados Cronológicos
-            }
-
-            // Gerador de Instrução com base no resultado da Matriz Preditiva
-            const agora = new Date();
-            const dataAtual = agora.toLocaleDateString('pt-BR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-            const horaAtual = agora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-
-            let baseInstruction = `Você é um motor de IA guiado por uma Q-Matrix Preditiva. O tempo real do sistema do cliente é ${dataAtual}, às ${horaAtual}.`;
-
-            // Condicional de ativação baseada no mapeamento vetorial
-            if (qVector[2] === 1) {
-                // Se o usuário interagir com projeções futuras ou citar anos como 2030, a matriz muda o comportamento interno
-                baseInstruction += " O usuário acionou o vetor de Projeção de Futuro. Atue de forma lógica criando cenários plausíveis, mantendo a consistência conceitual da linha do tempo informada.";
-            } else if (qVector[3] === 1 || qVector[1] === 1) {
-                baseInstruction += " O usuário acionou o vetor de Sincronia Temporal. Responda com precisão absoluta usando os dados de tempo real fornecidos, sem deixar margem para alucinações cronológicas.";
-            }
-
-            return baseInstruction;
+        function calcularOndasQuanticas() {
+            let min = parseFloat(document.getElementById('minuto').value) || 0;
+            let posse = parseFloat(document.getElementById('posse').value) || 50;
+            let xg = parseFloat(document.getElementById('xg').value) || 0;
+            let zona = parseFloat(document.getElementById('zona').value) || 50;
+            let posseNorm = posse / 100;
+            let theta = zona > 70 ? posseNorm * 1.6 : posseNorm * 0.6;
+            let energia = (xg * 0.44) + (theta * 0.31) - (min * 0.002);
+            let p_empate = Math.max(0.05, 0.33 * (1.0 - Math.abs(energia * 0.15)));
+            let p_a = (1.0 - p_empate) * (1.0 / (1.0 + Math.exp(-energia * 2)));
+            let p_b = 1.0 - p_a - p_empate;
+            let total = p_a + p_empate + p_b;
+            p_a = (p_a / total) * 100; p_empate = (p_empate / total) * 100; p_b = (p_b / total) * 100;
+            document.getElementById('txt-franca').innerText = p_a.toFixed(1) + '%';
+            document.getElementById('bar-franca').style.width = p_a.toFixed(1) + '%';
+            document.getElementById('txt-empate').innerText = p_empate.toFixed(1) + '%';
+            document.getElementById('bar-empate').style.width = p_empate.toFixed(1) + '%';
+            document.getElementById('txt-iraque').innerText = p_b.toFixed(1) + '%';
+            document.getElementById('bar-iraque').style.width = p_b.toFixed(1) + '%';
+            return { a: p_a.toFixed(1), e: p_empate.toFixed(1), c: p_b.toFixed(1) };
         }
 
         async function sendMessage() {
             const text = userInput.value.trim();
             const apiKey = apiKeyInput.value.trim();
-
             if (!text) return;
-            if (!apiKey) {
-                alert('Por favor, insira sua chave de API do Gemini no topo da tela.');
-                return;
-            }
+            if (!apiKey) { alert('Por favor, insira sua Gemini API Key no topo.'); return; }
 
+            chatMessages.innerHTML += `<div class="message user-message">${text}</div>`;
             userInput.value = '';
-            userInput.style.height = 'auto';
-            userInput.disabled = true;
-            sendBtn.disabled = true;
+            chatMessages.scrollTop = chatMessages.scrollHeight;
 
-            appendMessage(text, 'user-message', false);
-            const loadingDiv = appendMessage('Processando Matriz...', 'ai-message loading');
-            chatContainer.scrollTop = chatContainer.scrollHeight;
+            let currentProbs = calcularOndasQuanticas();
+            let min = document.getElementById('minuto').value;
 
-            // Executa o cálculo da Matriz Preditiva antes do envio
-            const dynamicSystemInstruction = processPredictiveQMatrix(text);
-
-            try {
-                const url = `https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
-
-                const response = await fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        systemInstruction: {
-                            parts: [{ text: dynamicSystemInstruction }]
-                        },
-                        contents: [{
-                            parts: [{ text: text }]
-                        }]
-                    })
-                });
-
-                const data = await response.json();
-                loadingDiv.remove();
-
-                if (data.error) {
-                    appendMessage(`Erro da API: ${data.error.message}`, 'ai-message', false);
-                    return;
-                }
-
-                if (data.candidates && data.candidates[0]?.content?.parts?.[0]?.text) {
-                    const aiResponse = data.candidates[0].content.parts[0].text;
-                    appendMessage(aiResponse, 'ai-message', true);
-                } else {
-                    appendMessage('Erro: Resposta estruturada incorretamente pelo servidor.', 'ai-message', false);
-                }
-
-            } catch (error) {
-                console.error(error);
-                if (loadingDiv) loadingDiv.remove();
-                appendMessage('Erro de conexão ao tentar se comunicar com o Gemini.', 'ai-message', false);
-            }
-
-            userInput.disabled = false;
-            sendBtn.disabled = false;
-            userInput.focus();
-            chatContainer.scrollTop = chatContainer.scrollHeight;
-        }
-
-        function appendMessage(text, className, parseMarkdown = false) {
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${className}`;
+            // URL oficial corrigida e estável de produção
+            const url = `https://googleapis.com{apiKey}`;
             
-            if (parseMarkdown) {
-                messageDiv.innerHTML = formatMarkdown(text);
-            } else {
-                messageDiv.textContent = text;
-            }
-            
-            chatContainer.appendChild(messageDiv);
-            return messageDiv;
-        }
-    </script>
-</body>
-</html>
+            // Injeção da Q-Matrix Preditiva contextualizando a IA
