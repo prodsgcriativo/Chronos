@@ -72,7 +72,7 @@
     </div>
 
     <div class="chat-messages" id="chat-box">
-        <div class="msg msg-system"><b>Chronos AI:</b> Canal pareado. Cole a sua chave iniciando em AQ. na caixa de texto acima e me envie um "Olá" para ativarmos o nosso chat inteligente.</div>
+        <div class="msg msg-system"><b>Chronos AI:</b> Canal pareado. Cole a sua chave iniciando em AIza na caixa de texto acima e me envie um "Olá" para ativarmos o nosso chat inteligente.</div>
     </div>
     <div class="chat-input-area">
         <input type="text" id="chat-in" class="chat-input" placeholder="Fale comigo sobre o jogo..." onkeypress="checarEnter(event)">
@@ -105,6 +105,12 @@ function calcularOndasQuanticas() {
     return { franca: p_a.toFixed(1), empate: p_empate.toFixed(1), iraque: p_b.toFixed(1) };
 }
 
+function checarEnter(event) {
+    if (event.key === "Enter") {
+        enviarMensagemAI();
+    }
+}
+
 async function enviarMensagemAI() {
     let apiKey = document.getElementById('api-key').value.trim();
     let inputCampo = document.getElementById('chat-in');
@@ -114,42 +120,35 @@ async function enviarMensagemAI() {
     if (textoUsuario === "") return;
     
     let box = document.getElementById('chat-box');
+    
+    // Mostra a mensagem do usuário na tela
     box.innerHTML += `<div class="msg msg-user"><b>Você:</b> ${textoUsuario}</div>`;
     inputCampo.value = "";
     box.scrollTop = box.scrollHeight;
 
+    // Captura os dados matemáticos atuais para injetar como contexto na IA
     let probs = calcularOndasQuanticas();
     let min = document.getElementById('minuto').value;
-    
-    const url = `https://googleapis.com{apiKey}`;
-    
-    const instruction = `Você é o parceiro estratégico do Projeto Chronos. Responda em Português de forma direta e curta. O jogo está no minuto ${min}. Probabilidades atuais do painel da esquerda: França (Estado A): ${probs.franca}%, Empate (Estado E): ${probs.empate}%, Iraque (Estado C): ${probs.iraque}%.`;
+    let posse = document.getElementById('posse').value;
+    let xg = document.getElementById('xg').value;
+    let zona = document.getElementById('zona').value;
+
+    // Adiciona o indicador de carregamento ("Pensando...")
+    let idPensando = "pensando-" + Date.now();
+    box.innerHTML += `<div class="msg msg-system" id="${idPensando}"><b>Chronos AI:</b> Calculando probabilidades...</div>`;
+    box.scrollTop = box.scrollHeight;
+
+    // Alimenta o histórico interno
+    historicoConversa.push({ role: "user", parts: [{ text: textoUsuario }] });
+
+    // Constrói as instruções de contexto em tempo real para a IA saber o cenário do jogo
+    let contextoPrompt = `[DADOS ATUAIS DA PARTIDA - Minuto: ${min}', Posse França: ${posse}%, xG França: ${xg}, Pressão: ${zona}%. Probabilidades calculadas: França ${probs.franca}%, Empate ${probs.empate}%, Iraque ${probs.iraque}%]`;
 
     try {
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+        // Chamada direta para a API Oficial do Google Gemini
+        let response = await fetch(`https://googleapis.com{apiKey}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-                contents: [{ parts: [{ text: instruction + " Pergunta do usuário: " + textoUsuario }] }]
-            })
-        });
-
-        const data = await response.json();
-        // LINHA CORRIGIDA: Adicionados os índices [0] obrigatórios para mapear o texto do Google sem travar o botão
-        if (data.candidates && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts[0].text) {
-            let aiText = data.candidates[0].content.parts[0].text;
-            box.innerHTML += `<div class="msg msg-system"><b>Chronos AI:</b> ${aiText}</div>`;
-        } else {
-            box.innerHTML += `<div class="msg msg-system" style="border-left-color: #f87171"><b>Erro:</b> Resposta inválida da API. Verifique a validade da chave.</div>`;
-        }
-    } catch (erro) {
-        box.innerHTML += `<div class="msg msg-system" style="border-left-color: #f87171"><b>Erro de Conexão:</b> Falha de rede. Certifique-se de ter colado a sua chave API completa.</div>`;
-    }
-    box.scrollTop = box.scrollHeight;
-}
-
-function checarEnter(e) { if(e.key === 'Enter') enviarMensagemAI(); }
-calcularOndasQuanticas();
-</script>
-</body>
-</html>
+                contents: historicoConversa,
+                systemInstruction: {
