@@ -116,39 +116,46 @@ async function enviarMensagemAI() {
     let inputCampo = document.getElementById('chat-in');
     let textoUsuario = inputCampo.value.trim();
     
-    if (!apiKey) { alert("Por favor, insira sua API Key."); return; }
+    if (!apiKey) { 
+        alert("Por favor, insira sua API Key."); 
+        return; 
+    }
     if (textoUsuario === "") return;
     
     let box = document.getElementById('chat-box');
     
-    // Mostra a mensagem do usuário na tela
     box.innerHTML += `<div class="msg msg-user"><b>Você:</b> ${textoUsuario}</div>`;
     inputCampo.value = "";
     box.scrollTop = box.scrollHeight;
 
-    // Captura os dados matemáticos atuais para injetar como contexto na IA
     let probs = calcularOndasQuanticas();
     let min = document.getElementById('minuto').value;
     let posse = document.getElementById('posse').value;
     let xg = document.getElementById('xg').value;
     let zona = document.getElementById('zona').value;
 
-    // Adiciona o indicador de carregamento ("Pensando...")
     let idPensando = "pensando-" + Date.now();
     box.innerHTML += `<div class="msg msg-system" id="${idPensando}"><b>Chronos AI:</b> Calculando probabilidades...</div>`;
     box.scrollTop = box.scrollHeight;
 
-    // Alimenta o histórico interno
     historicoConversa.push({ role: "user", parts: [{ text: textoUsuario }] });
 
-    // Constrói as instruções de contexto em tempo real para a IA saber o cenário do jogo
-    let contextoPrompt = `[DADOS ATUAIS DA PARTIDA - Minuto: ${min}', Posse França: ${posse}%, xG França: ${xg}, Pressão: ${zona}%. Probabilidades calculadas: França ${probs.franca}%, Empate ${probs.empate}%, Iraque ${probs.iraque}%]`;
-
     try {
-        // Chamada direta para a API Oficial do Google Gemini
         let response = await fetch(`https://googleapis.com{apiKey}`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
                 contents: historicoConversa,
                 systemInstruction: {
+                    parts: [{ text: `Você é o Chronos AI, um assistente analítico avançado especialista em trading esportivo e modelos matemáticos. Use os dados contextuais enviados em cada mensagem para fundamentar suas análises técnicas com um tom cibernético, direto e profissional. Dados atuais: Minuto ${min}, Posse ${posse}%, xG ${xg}, Pressão ${zona}%.` }]
+                }
+            })
+        });
+
+        let dados = await response.json();
+        
+        let elementoPensando = document.getElementById(idPensando);
+        if (elementoPensando) elementoPensando.remove();
+
+        if (dados.candidates && dados.candidates[0] && dados.candidates[0].content && dados.candidates[0].content.parts && dados.candidates[0].content.parts[0]) {
+            let respostaIA = dados.candidates[0].content.parts[0].text;
