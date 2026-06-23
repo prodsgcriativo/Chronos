@@ -123,7 +123,7 @@ async function enviarMensagemAI() {
     
     const url = `https://googleapis.com{apiKey}`;
     
-    const instruction = `Você é o parceiro estratégico do Projeto Chronos. Responda em Português de forma direta. O jogo está no minuto ${min}. Probabilidades atuais do painel da esquerda: França (Estado A): ${probs.franca}%, Empate (Estado E): ${probs.empate}%, Iraque (Estado C): ${probs.iraque}%.`;
+    const instruction = `Você é o parceiro estratégico do Projeto Chronos. Responda em Português de forma direta e curta. O jogo está no minuto ${min}. Probabilidades atuais do painel da esquerda: França (Estado A): ${probs.franca}%, Empate (Estado E): ${probs.empate}%, Iraque (Estado C): ${probs.iraque}%.`;
 
     try {
         const response = await fetch(url, {
@@ -135,14 +135,15 @@ async function enviarMensagemAI() {
         });
 
         const data = await response.json();
-        if (data.candidates && data.candidates[0].content.parts[0].text) {
+        // LINHA CORRIGIDA: Adicionados os índices [0] obrigatórios para mapear o texto do Google sem travar o botão
+        if (data.candidates && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts[0].text) {
             let aiText = data.candidates[0].content.parts[0].text;
             box.innerHTML += `<div class="msg msg-system"><b>Chronos AI:</b> ${aiText}</div>`;
         } else {
-            box.innerHTML += `<div class="msg msg-system" style="border-left-color: #f87171"><b>Erro:</b> Resposta inválida da API. Verifique os limites.</div>`;
+            box.innerHTML += `<div class="msg msg-system" style="border-left-color: #f87171"><b>Erro:</b> Resposta inválida da API. Verifique a validade da chave.</div>`;
         }
     } catch (erro) {
-        box.innerHTML += `<div class="msg msg-system" style="border-left-color: #f87171"><b>Erro de Conexão:</b> Falha ao processar. Certifique-se de ter colado a sua chave API completa.</div>`;
+        box.innerHTML += `<div class="msg msg-system" style="border-left-color: #f87171"><b>Erro de Conexão:</b> Falha de rede. Certifique-se de ter colado a sua chave API completa.</div>`;
     }
     box.scrollTop = box.scrollHeight;
 }
