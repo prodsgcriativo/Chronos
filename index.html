@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chronos Engine v1.0 - Terminal Privado</title>
+    <title>Chronos Engine v2.0 - Quantum Neuro-Predictive</title>
     <style>
         body { background-color: #020617; color: #f8fafc; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 20px; display: flex; justify-content: center; gap: 20px; height: 100vh; overflow: hidden; }
         .container { width: 100%; max-width: 430px; background-color: #0f172a; border: 1px solid #1e293b; padding: 25px; border-radius: 16px; box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.5); height: fit-content; }
@@ -17,7 +17,10 @@
         input:focus { border-color: #22d3ee; }
         button { width: 100%; padding: 12px; background-color: #06b6d4; border: none; border-radius: 8px; color: #020617; font-weight: bold; font-size: 14px; cursor: pointer; margin-top: 10px; }
         button:hover { background-color: #22d3ee; }
+        
         .result-box { margin-top: 20px; padding: 15px; background-color: #020617; border: 1px solid #1e293b; border-radius: 12px; }
+        .neuro-box { background-color: #1e1b4b; border: 1px solid #4338ca; padding: 12px; border-radius: 8px; margin-bottom: 15px; font-family: monospace; font-size: 12px; color: #e0e7ff; }
+        
         .progress-container { margin-bottom: 12px; }
         .progress-label { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px; font-weight: 600; }
         .progress-bar { width: 100%; height: 8px; background-color: #1e293b; border-radius: 4px; overflow: hidden; }
@@ -38,18 +41,26 @@
 
 <div class="container">
     <h1>MONITOR DE ONDAS TEMPORAIS</h1>
-    <div class="subtitle">Chronos Engine v1.0 // Painel Matemático</div>
+    <div class="subtitle">Chronos Engine v2.0 // Matriz Neuro-Cinética</div>
+    
     <div class="section-title">Dados Técnicos</div>
     <div class="input-group"><label>Minuto Atual da Partida</label><input type="number" id="minuto" value="75"></div>
-    <div class="input-group"><label>Posse de Bola da França (%)</label><input type="number" id="posse" value="62"></div>
-    <div class="input-group"><label>Gols Esperados (xG da França)</label><input type="number" id="xg" value="1.95" step="0.01"></div>
+    <div class="input-group"><label>Posse de Bola Favorito (%)</label><input type="number" id="posse" value="62"></div>
+    <div class="input-group"><label>Gols Esperados (xG Favorito)</label><input type="number" id="xg" value="1.95" step="0.01"></div>
     <div class="input-group"><label>Pressão Territorial (0 a 100)</label><input type="number" id="zona" value="76"></div>
-    <button onclick="calcularOndasQuanticas()">PROCESSAR MATRIZ PREDITIVA</button>
+    <button onclick="calcularOndasQuanticas()">PROCESSAR MATRIZ NEURO-PREDITIVA</button>
     
     <div class="result-box">
+        <!-- Monitor Neurobiológico Injetado -->
+        <div class="neuro-box">
+            🧠 TELEMETRIA NEUROCOGNITIVA:<br>
+            • Sobrecarga Sináptica (ISN): <span id="isn-val" style="color:#a5b4fc; font-weight:bold;">0%</span><br>
+            • Janela de Decisão Média: <span id="tempo-reacao" style="color:#a5b4fc; font-weight:bold;">240ms</span>
+        </div>
+
         <div class="section-title">Superposição de Estados</div>
         <div class="progress-container">
-            <div class="progress-label"><span>França (Estado A)</span><span id="txt-franca" style="color:#06b6d4">0.0%</span></div>
+            <div class="progress-label"><span>Favorito (Estado A)</span><span id="txt-franca" style="color:#06b6d4">0.0%</span></div>
             <div class="progress-bar"><div id="bar-franca" class="progress-fill bg-franca"></div></div>
         </div>
         <div class="progress-container">
@@ -57,7 +68,7 @@
             <div class="progress-bar"><div id="bar-empate" class="progress-fill bg-empate"></div></div>
         </div>
         <div class="progress-container">
-            <div class="progress-label"><span>Iraque (Estado C)</span><span id="txt-iraque" style="color:#10b981">0.0%</span></div>
+            <div class="progress-label"><span>Zebra (Estado C)</span><span id="txt-iraque" style="color:#10b981">0.0%</span></div>
             <div class="progress-bar"><div id="bar-iraque" class="progress-fill bg-iraque"></div></div>
         </div>
     </div>
@@ -72,7 +83,7 @@
     </div>
 
     <div class="chat-messages" id="chat-box">
-        <div class="msg msg-system"><b>Chronos AI:</b> Canal pareado. Cole a sua chave iniciando em AIza na caixa de texto acima e me envie um "Olá" para ativarmos o nosso chat inteligente.</div>
+        <div class="msg msg-system"><b>Chronos AI:</b> Módulo de análise neuro-cinética pareado. Envie uma mensagem para iniciar o diagnóstico tático-cognitivo em tempo real.</div>
     </div>
     <div class="chat-input-area">
         <input type="text" id="chat-in" class="chat-input" placeholder="Fale comigo sobre o jogo..." onkeypress="checarEnter(event)">
@@ -88,27 +99,45 @@ function calcularOndasQuanticas() {
     let posse = parseFloat(document.getElementById('posse').value) || 50;
     let xg = parseFloat(document.getElementById('xg').value) || 0;
     let zona = parseFloat(document.getElementById('zona').value) || 50;
+
+    // --- CÁLCULO NEUROCIENTÍFICO FUNCIONAL ---
+    // Fadiga mental cresce com o tempo, acelerada exponencialmente se a pressão territorial for alta (sufoco tático)
+    let fatorEstresse = zona / 50;
+    let isn = Math.min(100, (min * 0.7) * (1 + (fatorEstresse * 0.3)));
+    
+    // Tempo de reação motora/cognitiva padrão é 200ms. Sobe até 450ms em exaustão extrema.
+    let reacaoCognitiva = 200 + (isn * 2.5);
+
+    // Atualiza a tela com o painel neurocientífico
+    document.getElementById('isn-val').innerText = isn.toFixed(1) + '%';
+    document.getElementById('tempo-reacao').innerText = reacaoCognitiva.toFixed(0) + 'ms';
+    // ----------------------------------------
+
     let posseNorm = posse / 100;
     let theta = zona > 70 ? posseNorm * 1.6 : posseNorm * 0.6;
-    let energia = (xg * 0.44) + (theta * 0.31) - (min * 0.002);
-    let p_empate = Math.max(0.05, 0.33 * (1.0 - Math.abs(energia * 0.15)));
+    
+    // O desgaste cognitivo extremo (ISN alto) quebra a estabilidade defensiva, reduzindo chances de empate tático tardio
+    let energia = (xg * 0.44) + (theta * 0.31) - (min * 0.002) + (isn * 0.005);
+    
+    let p_empate = Math.max(0.02, 0.33 * (1.0 - Math.abs(energia * 0.15)) * (1 - (isn / 150)));
     let p_a = (1.0 - p_empate) * (1.0 / (1.0 + Math.exp(-energia * 2)));
     let p_b = 1.0 - p_a - p_empate;
     let total = p_a + p_empate + p_b;
+    
     p_a = (p_a / total) * 100; p_empate = (p_empate / total) * 100; p_b = (p_b / total) * 100;
+    
     document.getElementById('txt-franca').innerText = p_a.toFixed(1) + '%';
     document.getElementById('bar-franca').style.width = p_a.toFixed(1) + '%';
     document.getElementById('txt-empate').innerText = p_empate.toFixed(1) + '%';
     document.getElementById('bar-empate').style.width = p_empate.toFixed(1) + '%';
     document.getElementById('txt-iraque').innerText = p_b.toFixed(1) + '%';
     document.getElementById('bar-iraque').style.width = p_b.toFixed(1) + '%';
-    return { franca: p_a.toFixed(1), empate: p_empate.toFixed(1), iraque: p_b.toFixed(1) };
+    
+    return { franca: p_a.toFixed(1), empate: p_empate.toFixed(1), iraque: p_b.toFixed(1), isn: isn.toFixed(1), ms: reacaoCognitiva.toFixed(0) };
 }
 
 function checarEnter(event) {
-    if (event.key === "Enter") {
-        enviarMensagemAI();
-    }
+    if (event.key === "Enter") enviarMensagemAI();
 }
 
 async function enviarMensagemAI() {
@@ -116,46 +145,16 @@ async function enviarMensagemAI() {
     let inputCampo = document.getElementById('chat-in');
     let textoUsuario = inputCampo.value.trim();
     
-    if (!apiKey) { 
-        alert("Por favor, insira sua API Key."); 
-        return; 
-    }
+    if (!apiKey) { alert("Por favor, insira sua API Key do Google AI Studio."); return; }
     if (textoUsuario === "") return;
     
     let box = document.getElementById('chat-box');
-    
     box.innerHTML += `<div class="msg msg-user"><b>Você:</b> ${textoUsuario}</div>`;
     inputCampo.value = "";
     box.scrollTop = box.scrollHeight;
 
-    let probs = calcularOndasQuanticas();
+    let dadosNeuro = calcularOndasQuanticas();
     let min = document.getElementById('minuto').value;
     let posse = document.getElementById('posse').value;
     let xg = document.getElementById('xg').value;
     let zona = document.getElementById('zona').value;
-
-    let idPensando = "pensando-" + Date.now();
-    box.innerHTML += `<div class="msg msg-system" id="${idPensando}"><b>Chronos AI:</b> Calculando probabilidades...</div>`;
-    box.scrollTop = box.scrollHeight;
-
-    historicoConversa.push({ role: "user", parts: [{ text: textoUsuario }] });
-
-    try {
-        let response = await fetch(`https://googleapis.com{apiKey}`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                contents: historicoConversa,
-                systemInstruction: {
-                    parts: [{ text: `Você é o Chronos AI, um assistente analítico avançado especialista em trading esportivo e modelos matemáticos. Use os dados contextuais enviados em cada mensagem para fundamentar suas análises técnicas com um tom cibernético, direto e profissional. Dados atuais: Minuto ${min}, Posse ${posse}%, xG ${xg}, Pressão ${zona}%.` }]
-                }
-            })
-        });
-
-        let dados = await response.json();
-        
-        let elementoPensando = document.getElementById(idPensando);
-        if (elementoPensando) elementoPensando.remove();
-
-        if (dados.candidates && dados.candidates[0] && dados.candidates[0].content && dados.candidates[0].content.parts && dados.candidates[0].content.parts[0]) {
-            let respostaIA = dados.candidates[0].content.parts[0].text;
