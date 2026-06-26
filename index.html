@@ -96,11 +96,13 @@
 
     .logo-icon {
       width: 36px; height: 36px;
-      background: linear-gradient(135deg, var(--gold-dark), var(--gold-main));
+      background: linear-gradient(135deg, var(--gold-main), var(--gold-bright));
       border-radius: 8px;
       display: flex; align-items: center; justify-content: center;
-      font-size: 18px; color: #000; font-weight: 900;
+      font-size: 18px;
     }
+
+
 
     .logo-text h1 {
       font-size: 14px; font-weight: 800; letter-spacing: 2.5px;
@@ -149,7 +151,9 @@
       transition: border-color .3s;
     }
 
-    .panel:hover { border-color: var(--border-bright); }
+    .panel:hover {
+      border-color: var(--border-bright);
+    }
 
     .panel-header {
       padding: 12px 18px 10px;
@@ -180,18 +184,12 @@
     .panel-body::-webkit-scrollbar-track { background: transparent; }
     .panel-body::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 4px; }
 
-    /* FORM & GRID */
-    .metrics-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-
+    /* FORM */
     .form-full { margin-bottom: 8px; }
 
     .field-label {
       display: block; font-size: 9px; font-weight: 600; letter-spacing: 1px;
-      color: var(--text-secondary); text-transform: uppercase; margin-bottom: 4px;
+      color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px;
     }
 
     select, input[type="number"], input[type="text"], input[type="password"] {
@@ -205,6 +203,7 @@
       font-size: 12px;
       outline: none;
       transition: all .2s;
+      -webkit-appearance: none;
     }
 
     select {
@@ -216,6 +215,7 @@
     }
 
     select option { background: #0a0800; color: var(--text-primary); }
+
     select:focus, input:focus {
       border-color: var(--gold-main);
       box-shadow: 0 0 0 2px rgba(212,175,55,0.12);
@@ -244,41 +244,774 @@
       border: none; border-radius: 8px;
       color: #000; font-weight: 800; font-size: 11px;
       letter-spacing: 2px; text-transform: uppercase;
-      cursor: pointer; transition: all .3s;
+      cursor: pointer; position: relative; overflow: hidden;
+      transition: all .3s;
       box-shadow: 0 2px 8px rgba(0,0,0,.4);
       font-family: var(--font-ui);
       margin-top: 10px;
     }
 
-    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 12px var(--gold-glow); }
+    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,.5); }
     .btn-primary:active { transform: translateY(0); }
 
-    /* STATE RESULTS */
-    .result-box { margin-top: 15px; padding: 12px; background: rgba(5,4,0,0.6); border: 1px solid var(--border); border-radius: 10px; }
-    .progress-container { margin-bottom: 10px; }
-    .progress-label { display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 3px; font-family: var(--font-mono); }
-    .progress-bar { width: 100%; height: 6px; background: rgba(255,255,255,0.05); border-radius: 3px; overflow: hidden; border: 1px solid rgba(212,175,55,0.1); }
-    .progress-fill { height: 100%; width: 0%; background: var(--gold-main); transition: width 0.5s ease-out; }
-
-    /* FOOTER MATRIX SUBCARDS */
-    .matrix-subcards {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 8px;
-      margin-top: 12px;
+    .btn-secondary {
+      padding: 8px 12px;
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      border-radius: 8px; color: var(--gold-main);
+      font-size: 11px; font-weight: 600; letter-spacing: 1px;
+      cursor: pointer; transition: all .2s;
+      font-family: var(--font-ui); flex-shrink: 0;
     }
-    .subcard {
-      background: rgba(15,12,0,0.6);
+
+    .btn-secondary:hover {
+      border-color: var(--gold-main);
+      background: rgba(212,175,55,0.08);
+    }
+
+    .btn-send {
+      padding: 9px 14px; flex-shrink: 0;
+      background: linear-gradient(135deg, var(--gold-dark), var(--gold-main));
+      border: none; border-radius: 8px;
+      color: #000; font-weight: 800; font-size: 11px;
+      cursor: pointer; transition: all .2s;
+      letter-spacing: 1px; font-family: var(--font-ui);
+    }
+
+    .btn-send:hover {
+      background: linear-gradient(135deg, var(--gold-main), var(--gold-bright));
+    }
+
+    /* RESULTS */
+    .results-section {
+      margin-top: 12px;
+      padding: 12px;
+      background: rgba(0,0,0,.6);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+    }
+
+    .result-title {
+      font-size: 9px; font-weight: 700; letter-spacing: 2px;
+      color: var(--gold-dark); text-transform: uppercase;
+      margin-bottom: 10px; text-align: center;
+    }
+
+    .prob-row { margin-bottom: 8px; }
+
+    .prob-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 4px;
+    }
+
+    .prob-label { font-size: 11px; font-weight: 600; color: var(--text-secondary); }
+
+    .prob-value {
+      font-family: var(--font-mono); font-size: 13px; font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    .prob-value.gold  { color: var(--gold-bright); }
+    .prob-value.cyan  { color: var(--cyan-accent); }
+    .prob-value.green { color: var(--green-accent); }
+
+    .prob-track {
+      width: 100%; height: 5px;
+      background: rgba(255,255,255,.05);
+      border-radius: 3px; overflow: hidden;
+    }
+
+    .prob-fill {
+      height: 100%; width: 0%; border-radius: 3px;
+      transition: width .6s cubic-bezier(.4,0,.2,1);
+      position: relative;
+    }
+
+
+
+    .fill-a { background: linear-gradient(90deg, var(--gold-dark), var(--gold-bright)); }
+    .fill-e { background: linear-gradient(90deg, #1a4a6b, var(--cyan-accent)); }
+    .fill-b { background: linear-gradient(90deg, #004a20, var(--green-accent)); }
+
+    .quantum-grid {
+      display: grid; grid-template-columns: 1fr 1fr 1fr;
+      gap: 6px; margin-top: 10px;
+    }
+
+    .q-cell {
+      background: rgba(0,0,0,.5);
+      border: 1px solid var(--border);
+      border-radius: 8px; padding: 7px;
+      text-align: center;
+    }
+
+    .q-cell-label { font-size: 8px; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 3px; }
+    .q-cell-value { font-family: var(--font-mono); font-size: 12px; font-weight: 700; color: var(--gold-bright); }
+
+    /* TEAMS ROW */
+    .teams-row { display: flex; align-items: flex-end; gap: 8px; margin-bottom: 8px; }
+
+    .vs-badge {
+      flex-shrink: 0; margin-bottom: 1px;
+      font-family: var(--font-mono); font-size: 10px; font-weight: 700;
+      color: var(--gold-dark);
+      padding: 7px 6px;
       border: 1px solid var(--border);
       border-radius: 6px;
-      padding: 6px;
-      text-align: center;
+      background: rgba(0,0,0,.4);
+    }
+
+    /* METRICS GRID */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+    }
+
+    .metric-card {
+      background: rgba(0,0,0,.4);
+      border: 1px solid var(--border);
+      border-radius: 8px; padding: 7px 9px;
+      transition: border-color .2s;
+    }
+
+    .metric-card:hover { border-color: rgba(212,175,55,.4); }
+
+    /* CHAT */
+    .chat-panel { display: flex; flex-direction: column; }
+
+    .api-row {
+      display: flex; gap: 8px; align-items: center;
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .api-row input { flex: 1; }
+
+    .chat-messages {
+      flex: 1; overflow-y: auto;
+      padding: 12px 16px;
+      display: flex; flex-direction: column; gap: 10px;
+    }
+
+    .chat-messages::-webkit-scrollbar { width: 3px; }
+    .chat-messages::-webkit-scrollbar-track { background: transparent; }
+    .chat-messages::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 4px; }
+
+    .msg {
+      max-width: 88%;
+      padding: 9px 13px;
+      border-radius: 10px;
+      font-size: 12px; line-height: 1.5;
+      word-break: break-word;
+      animation: msgIn .3s cubic-bezier(.4,0,.2,1);
+    }
+
+    @keyframes msgIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+
+    .msg-ai {
+      align-self: flex-start;
+      background: rgba(20,15,0,.9);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--gold-main);
+      color: var(--text-primary);
       font-family: var(--font-mono);
     }
-    .subcard-lbl { font-size: 8px; color: var(--text-muted); text-transform: uppercase; }
-    .subcard-val { font-size: 11px; color: var(--gold-bright); font-weight: bold; }
 
-    /* CHAT LAYOUT */
-    .chat-messages { flex: 1; overflow-y: auto; background: rgba(0,0,0,0.4); border: 1px solid var(--border); border-radius: 10px; padding: 12px; margin-bottom: 10px; display: flex; flex-direction: column; gap: 8px; }
-    .msg { padding: 8px 12px; border-radius: 8px; max-width: 85%; font-size: 12px; line-height: 1.4; word-wrap: break-word; }
-    .msg-system { background: rgba(20,16,0,0.6); color: var(--text-primary); align-self: flex-start; border-left: 2px solid var(--gold-bright); }
+    .msg-ai b { color: var(--gold-bright); }
+
+    .msg-user {
+      align-self: flex-end;
+      background: linear-gradient(135deg, rgba(74,56,0,.8), rgba(30,22,0,.9));
+      border: 1px solid rgba(212,175,55,.3);
+      color: var(--text-primary);
+    }
+
+    .msg-user b { color: var(--gold-bright); }
+
+    .msg-error {
+      align-self: flex-start;
+      background: rgba(40,0,0,.8);
+      border: 1px solid rgba(255,68,68,.3);
+      border-left: 3px solid var(--red-accent);
+      color: #ff9999;
+      font-family: var(--font-mono);
+    }
+
+    .typing-dots { display: flex; gap: 4px; align-items: center; padding: 4px 0; }
+
+    .typing-dots span {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: var(--gold-main);
+      animation: typeDot 1.2s ease-in-out infinite;
+    }
+
+    .typing-dots span:nth-child(2) { animation-delay: .2s; }
+    .typing-dots span:nth-child(3) { animation-delay: .4s; }
+
+    @keyframes typeDot { 0%,60%,100%{transform:translateY(0);opacity:.4} 30%{transform:translateY(-5px);opacity:1} }
+
+    .chat-input-row {
+      display: flex; gap: 8px;
+      padding: 10px 16px;
+      border-top: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .chat-input-row input { flex: 1; }
+
+    @media (max-width: 900px) {
+      body { overflow: auto; }
+      .app-wrapper { grid-template-columns: 1fr; overflow: auto; height: auto; }
+      .header-bar { grid-column: 1; }
+      #match-header-label { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="bg-grid"></div>
+<div class="bg-radial"></div>
+<div class="scanlines"></div>
+
+<div class="app-wrapper">
+
+  <!-- HEADER -->
+  <header class="header-bar">
+    <div class="logo-section">
+      <div class="logo-icon">⚛</div>
+      <div class="logo-text">
+        <h1>CHRONOS ENGINE</h1>
+        <div class="version">v2.0 // QUANTUM PREDICTIVE MATRIX</div>
+      </div>
+    </div>
+    <span id="match-header-label">AGUARDANDO CONFIGURAÇÃO</span>
+    <div class="status-bar">
+      <div class="status-pill">
+        <div class="status-dot offline" id="api-status-dot"></div>
+        <span id="api-status-text">API OFFLINE</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- PAINEL ESQUERDO -->
+  <div class="panel">
+    <div class="panel-header">
+      <div class="panel-title">Monitor de Ondas Temporais</div>
+    </div>
+    <div class="panel-body">
+
+      <div class="form-full">
+        <label class="field-label" for="torneio">Torneio / Competição</label>
+        <select id="torneio" onchange="onTorneioChange()">
+          <option value="">— Selecione o torneio —</option>
+          <optgroup label="🌍 FIFA / Seleções">
+            <option value="copa_mundo_2026">Copa do Mundo FIFA 2026</option>
+            <option value="copa_mundo_2022">Copa do Mundo FIFA 2022</option>
+            <option value="eliminatorias_sul">Eliminatórias Sul-Americanas</option>
+            <option value="eliminatorias_euro">Eliminatórias UEFA</option>
+            <option value="copa_america">Copa América</option>
+            <option value="euro_2024">UEFA Euro 2024</option>
+            <option value="nations_league">UEFA Nations League</option>
+            <option value="copa_africana">Copa Africana de Nações</option>
+            <option value="copa_asia">Copa Ásia AFC</option>
+            <option value="gold_cup">CONCACAF Gold Cup</option>
+            <option value="amistoso_fifa">Amistoso Internacional FIFA</option>
+          </optgroup>
+          <optgroup label="🇧🇷 Brasil">
+            <option value="brasileirao_a">Brasileirão Série A</option>
+            <option value="brasileirao_b">Brasileirão Série B</option>
+            <option value="copa_brasil">Copa do Brasil</option>
+            <option value="supercopa_brasil">Supercopa do Brasil</option>
+            <option value="carioca">Campeonato Carioca</option>
+            <option value="paulista">Campeonato Paulista</option>
+            <option value="mineiro">Campeonato Mineiro</option>
+            <option value="gaucho">Campeonato Gaúcho</option>
+          </optgroup>
+          <optgroup label="🌎 América do Sul">
+            <option value="libertadores">Copa Libertadores</option>
+            <option value="sul_americana">Copa Sul-Americana</option>
+            <option value="recopa_sul">Recopa Sul-Americana</option>
+            <option value="liga_argentina">Liga Profissional Argentina</option>
+            <option value="liga_colombiana">Liga Betplay Colombiana</option>
+            <option value="liga_chilena">Primera División Chile</option>
+          </optgroup>
+          <optgroup label="🇪🇺 Europa — Clubes">
+            <option value="champions_league">UEFA Champions League</option>
+            <option value="europa_league">UEFA Europa League</option>
+            <option value="conference_league">UEFA Conference League</option>
+            <option value="premier_league">Premier League</option>
+            <option value="la_liga">La Liga (Espanha)</option>
+            <option value="bundesliga">Bundesliga (Alemanha)</option>
+            <option value="serie_a_ita">Serie A (Itália)</option>
+            <option value="ligue_1">Ligue 1 (França)</option>
+            <option value="eredivisie">Eredivisie (Holanda)</option>
+            <option value="primeira_liga">Primeira Liga (Portugal)</option>
+            <option value="super_lig">Süper Lig (Turquia)</option>
+          </optgroup>
+          <optgroup label="🌏 Resto do Mundo">
+            <option value="saudi_league">Saudi Pro League</option>
+            <option value="mls">MLS (EUA)</option>
+            <option value="j_league">J-League (Japão)</option>
+            <option value="csl">Super Liga Chinesa</option>
+          </optgroup>
+        </select>
+      </div>
+
+      <div class="teams-row">
+        <div style="flex:1">
+          <label class="field-label" for="time-a">Time A (Casa)</label>
+          <select id="time-a" onchange="updateHeader()"><option value="">— Time A —</option></select>
+        </div>
+        <div class="vs-badge">VS</div>
+        <div style="flex:1">
+          <label class="field-label" for="time-b">Time B (Fora)</label>
+          <select id="time-b" onchange="updateHeader()"><option value="">— Time B —</option></select>
+        </div>
+      </div>
+
+      <div class="section-sep"><span>Métricas Quânticas</span></div>
+
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <label class="field-label" for="m-minuto">⏱ Minuto</label>
+          <input type="number" id="m-minuto" value="75" min="0" max="120" />
+        </div>
+        <div class="metric-card">
+          <label class="field-label" for="m-posse">⚽ Posse A (%)</label>
+          <input type="number" id="m-posse" value="62" min="0" max="100" />
+        </div>
+        <div class="metric-card">
+          <label class="field-label" for="m-xg">📊 xG Time A</label>
+          <input type="number" id="m-xg" value="1.95" min="0" max="10" step="0.01" />
+        </div>
+        <div class="metric-card">
+          <label class="field-label" for="m-xa">🎯 xA Time A</label>
+          <input type="number" id="m-xa" value="0.80" min="0" max="10" step="0.01" />
+        </div>
+        <div class="metric-card">
+          <label class="field-label" for="m-pressao">🔥 Pressão Territorial</label>
+          <input type="number" id="m-pressao" value="76" min="0" max="100" />
+        </div>
+        <div class="metric-card">
+          <label class="field-label" for="m-fin-alvo">🥅 Fin. no Alvo A</label>
+          <input type="number" id="m-fin-alvo" value="5" min="0" max="30" />
+        </div>
+        <div class="metric-card">
+          <label class="field-label" for="m-fin-total">📐 Fin. Totais A</label>
+          <input type="number" id="m-fin-total" value="12" min="0" max="50" />
+        </div>
+        <div class="metric-card">
+          <label class="field-label" for="m-ataques">⚡ Ataques Perigosos</label>
+          <input type="number" id="m-ataques" value="38" min="0" max="200" />
+        </div>
+        <div class="metric-card">
+          <label class="field-label" for="m-escanteios">🚩 Escanteios A</label>
+          <input type="number" id="m-escanteios" value="6" min="0" max="30" />
+        </div>
+        <div class="metric-card">
+          <label class="field-label" for="m-cartoes">🟨 Cartões (A-B)</label>
+          <input type="number" id="m-cartoes" value="2" min="0" max="20" />
+        </div>
+        <div class="metric-card">
+          <label class="field-label" for="m-forma-a">📈 Forma A (0-15)</label>
+          <input type="number" id="m-forma-a" value="11" min="0" max="15" />
+        </div>
+        <div class="metric-card">
+          <label class="field-label" for="m-forma-b">📉 Forma B (0-15)</label>
+          <input type="number" id="m-forma-b" value="7" min="0" max="15" />
+        </div>
+      </div>
+
+      <button class="btn-primary" id="btn-processar" onclick="processarMatriz()">
+        ⚛ PROCESSAR MATRIZ QUÂNTICA
+      </button>
+
+      <div class="results-section">
+        <div class="result-title">// SUPERPOSIÇÃO DE ESTADOS //</div>
+
+        <div class="prob-row">
+          <div class="prob-header">
+            <span class="prob-label" id="label-a">TIME A</span>
+            <span class="prob-value gold" id="val-a">—</span>
+          </div>
+          <div class="prob-track"><div class="prob-fill fill-a" id="bar-a"></div></div>
+        </div>
+
+        <div class="prob-row">
+          <div class="prob-header">
+            <span class="prob-label">EMPATE</span>
+            <span class="prob-value cyan" id="val-e">—</span>
+          </div>
+          <div class="prob-track"><div class="prob-fill fill-e" id="bar-e"></div></div>
+        </div>
+
+        <div class="prob-row">
+          <div class="prob-header">
+            <span class="prob-label" id="label-b">TIME B</span>
+            <span class="prob-value green" id="val-b">—</span>
+          </div>
+          <div class="prob-track"><div class="prob-fill fill-b" id="bar-b"></div></div>
+        </div>
+
+        <div class="quantum-grid">
+          <div class="q-cell">
+            <div class="q-cell-label">Energia Ψ</div>
+            <div class="q-cell-value" id="q-energia">—</div>
+          </div>
+          <div class="q-cell">
+            <div class="q-cell-label">Entropia H</div>
+            <div class="q-cell-value" id="q-entropia">—</div>
+          </div>
+          <div class="q-cell">
+            <div class="q-cell-label">Momentum λ</div>
+            <div class="q-cell-value" id="q-momentum">—</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PAINEL DIREITO — CHAT -->
+  <div class="panel chat-panel">
+    <div class="panel-header">
+      <div class="panel-title">Terminal de Comunicação AI</div>
+    </div>
+
+    <div class="api-row">
+      <input
+    type="password"
+    id="api-key"
+    placeholder="Cole sua API Key do Google AI Studio (AQ... ou AIza...)..."
+    oninput="checkApiKey()" />
+      <button class="btn-secondary" onclick="autoAnalisar()" title="Auto-Analisar com dados atuais">⚛ Auto</button>
+    </div>
+
+    <div class="chat-messages" id="chat-box">
+      <div class="msg msg-ai">
+        <b>Chronos AI ▶</b><br>
+        Canal pareado. Sistema pronto para análise quântica.<br><br>
+        <span style="color:var(--text-muted);font-size:10px;">
+          1. Selecione o torneio e os times<br>
+          2. Ajuste as 12 métricas quânticas<br>
+          3. Clique em "Processar Matriz"<br>
+          4. Cole sua API Key e converse
+        </span>
+      </div>
+    </div>
+
+    <div class="chat-input-row">
+      <input type="text" id="chat-in" placeholder="Consulte o Chronos AI sobre o jogo..." onkeydown="chatKeyDown(event)" />
+      <button class="btn-send" onclick="enviarMensagem()">ENVIAR</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* ═══════════ DATA ═══════════ */
+const SELECOES_FIFA = ["Afeganistão","África do Sul","Albânia","Alemanha","Andorra","Angola","Antígua e Barbuda","Arábia Saudita","Argélia","Argentina","Armênia","Austrália","Áustria","Azerbaijão","Bahamas","Bahrein","Bangladesh","Barbados","Belarus","Bélgica","Belize","Benin","Bermudas","Bolívia","Bósnia e Herzegovina","Botswana","Brasil","Bulgária","Burkina Faso","Burundi","Cabo Verde","Camarões","Camboja","Canadá","Cazaquistão","Chade","Chile","China","Chipre","Colômbia","Comoros","Congo","Coreia do Norte","Coreia do Sul","Costa do Marfim","Costa Rica","Croácia","Cuba","Curaçao","Dinamarca","Djibuti","Dominica","El Salvador","Emirados Árabes Unidos","Equador","Eritreia","Escócia","Eslováquia","Eslovênia","Espanha","Estados Unidos","Estônia","Etiópia","Fiji","Filipinas","Finlândia","França","Gabão","Gâmbia","Gana","Georgia","Gibraltar","Granada","Grécia","Guatemala","Guiana","Guiné","Guiné-Bissau","Guiné Equatorial","Haiti","Honduras","Hong Kong","Hungria","Iêmen","Ilhas Cayman","Ilhas Cook","Ilhas Faroe","Ilhas Salomão","Índia","Indonésia","Inglaterra","Irã","Iraque","Irlanda","Irlanda do Norte","Islândia","Israel","Itália","Jamaica","Japão","Jordânia","Kosovo","Kuwait","Laos","Lesoto","Letônia","Líbano","Libéria","Líbia","Liechtenstein","Lituânia","Luxemburgo","Macedônia do Norte","Madagascar","Malásia","Malawi","Maldivas","Mali","Malta","Marrocos","Martinica","Mauritânia","Maurício","México","Moldova","Mongólia","Montenegro","Montserrat","Moçambique","Myanmar","Namíbia","Nepal","Nicarágua","Niger","Nigéria","Noruega","Nova Zelândia","Omã","País de Gales","Países Baixos","Panamá","Papua Nova Guiné","Paquistão","Paraguai","Peru","Polônia","Portugal","Qatar","República Checa","República Dominicana","Romênia","Ruanda","Rússia","São Cristóvão e Névis","São Tomé e Príncipe","São Vicente e Granadinas","Santa Lúcia","Senegal","Serra Leoa","Sérvia","Singapura","Síria","Somália","Sri Lanka","Sudão","Sudão do Sul","Suécia","Suíça","Suriname","Tailândia","Tanzânia","Timor-Leste","Togo","Trinidad e Tobago","Tunísia","Turquia","Turcomenistão","Uganda","Ucrânia","Uruguai","Uzbequistão","Vanuatu","Venezuela","Vietnã","Zâmbia","Zimbábue"];
+
+const TIMES_POR_TORNEIO = {
+  copa_mundo_2026:["Alemanha","Argentina","Austrália","Bélgica","Brasil","Canadá","Colômbia","Coreia do Sul","Costa Rica","Croácia","Dinamarca","Equador","Espanha","Estados Unidos","França","Países Baixos","Inglaterra","Irã","Iraque","Itália","Japão","Marrocos","México","Nigéria","Noruega","Paraguai","Peru","Portugal","Senegal","Suíça","Turquia","Uruguai"],
+  copa_mundo_2022:["Argentina","Austrália","Bélgica","Brasil","Canadá","Camarões","Coreia do Sul","Costa Rica","Croácia","Dinamarca","Equador","Espanha","Estados Unidos","França","Gana","Inglaterra","Irã","Japão","Marrocos","México","Polônia","Portugal","Qatar","Senegal","Sérvia","Suíça","Tunísia","Uruguai"],
+  eliminatorias_sul:["Argentina","Bolívia","Brasil","Chile","Colômbia","Equador","Paraguai","Peru","Uruguai","Venezuela"],
+  eliminatorias_euro:["Alemanha","Albânia","Andorra","Armênia","Áustria","Azerbaijão","Belarus","Bélgica","Bósnia e Herzegovina","Bulgária","Chipre","Croácia","Dinamarca","Escócia","Eslováquia","Eslovênia","Espanha","Estônia","Ilhas Faroe","Finlândia","França","Georgia","Gibraltar","Grécia","Hungria","Inglaterra","Irlanda","Irlanda do Norte","Islândia","Israel","Itália","Kosovo","Letônia","Liechtenstein","Lituânia","Luxemburgo","Macedônia do Norte","Malta","Moldova","Montenegro","Noruega","País de Gales","Países Baixos","Polônia","Portugal","República Checa","Romênia","Sérvia","Suécia","Suíça","Turquia","Ucrânia"],
+  copa_america:["Argentina","Bolívia","Brasil","Chile","Colômbia","Equador","Paraguai","Peru","Uruguai","Venezuela","México","Estados Unidos"],
+  euro_2024:["Alemanha","Albânia","Áustria","Bélgica","Croácia","Dinamarca","Escócia","Eslovênia","Espanha","França","Georgia","Hungria","Inglaterra","Itália","Países Baixos","Polônia","Portugal","República Checa","Romênia","Sérvia","Suíça","Turquia","Ucrânia","Eslováquia"],
+  nations_league:["Alemanha","Espanha","França","Inglaterra","Itália","Países Baixos","Portugal","Bélgica","Croácia","Dinamarca","Suíça","Áustria","Polônia","Hungria","Sérvia","Escócia"],
+  copa_africana:["África do Sul","Argélia","Angola","Burkina Faso","Camarões","Cabo Verde","Costa do Marfim","Gana","Guiné","Guiné-Bissau","Guiné Equatorial","Mali","Marrocos","Mauritânia","Moçambique","Namíbia","Nigéria","Ruanda","Senegal","Serra Leoa","Tanzânia","Togo","Tunísia","Uganda","Zâmbia","Zimbábue"],
+  copa_asia:["Arábia Saudita","Austrália","Bahrein","China","Coreia do Norte","Coreia do Sul","Emirados Árabes Unidos","Filipinas","Índia","Indonésia","Irã","Iraque","Japão","Jordânia","Kuwait","Líbano","Malásia","Omã","Qatar","Síria","Tailândia","Uzbequistão","Vietnã","Iêmen"],
+  gold_cup:["Canadá","Costa Rica","Cuba","Curaçao","El Salvador","Estados Unidos","Guatemala","Haiti","Honduras","Jamaica","México","Martinica","Nicarágua","Panamá","Trinidad e Tobago"],
+  amistoso_fifa: SELECOES_FIFA,
+  brasileirao_a:["América Mineiro","Athletico Paranaense","Atlético Mineiro","Bahia","Botafogo","Bragantino","Corinthians","Coritiba","Criciúma","Cruzeiro","Cuiabá","Flamengo","Fluminense","Fortaleza","Grêmio","Internacional","Juventude","Palmeiras","Santos","São Paulo","Sport Recife","Vasco","Vitória"],
+  brasileirao_b:["Avaí","Botafogo SP","Ceará","Chapecoense","CRB","CSA","Goiás","Guarani","Ituano","Londrina","Mirassol","Novorizontino","Operário","Paysandu","Ponte Preta","Sampaio Corrêa","Tombense","Sport Recife","Vila Nova"],
+  copa_brasil:["Athletico Paranaense","Atlético Mineiro","Bahia","Botafogo","Corinthians","Cruzeiro","Flamengo","Fluminense","Fortaleza","Grêmio","Internacional","Palmeiras","Santos","São Paulo","Vasco"],
+  supercopa_brasil:["Flamengo","Atlético Mineiro","Botafogo","Palmeiras"],
+  carioca:["Bangu","Botafogo","Cabofriense","Flamengo","Fluminense","Madureira","Nova Iguaçu","Portuguesa RJ","Resende","Vasco","Volta Redonda"],
+  paulista:["Corinthians","Guarani","Ituano","Mirassol","Novorizontino","Palmeiras","Red Bull Bragantino","Santos","São Bernardo","São Paulo","Ponte Preta","Inter de Limeira"],
+  mineiro:["América Mineiro","Athletic Club","Atlético Mineiro","Caldense","Cruzeiro","Democrata GV","Patrocinense","Pouso Alegre","Tombense","Uberaba"],
+  gaucho:["Brasil de Pelotas","Caxias","Esportivo","Grêmio","Internacional","Novo Hamburgo","Pelotas","São José","São Luiz","Ypiranga"],
+  libertadores:["Boca Juniors","Flamengo","Fluminense","Atlético Mineiro","Botafogo","River Plate","Palmeiras","Racing Club","Estudiantes","Peñarol","Nacional","São Paulo","Internacional","Olimpia","Cerro Porteño","Grêmio"],
+  sul_americana:["Athletico Paranaense","Corinthians","Vasco","Santos","Cruzeiro","Universidad de Chile","LDU Quito","Defensa y Justicia","Independiente","Huracán","Estudiantes","Fortaleza"],
+  recopa_sul:["Fluminense","LDU Quito"],
+  liga_argentina:["Boca Juniors","River Plate","Independiente","Racing Club","San Lorenzo","Estudiantes","Lanus","Talleres","Belgrano","Newell's Old Boys","Rosario Central","Banfield"],
+  liga_colombiana:["Atlético Nacional","Millonarios","Deportivo Cali","América de Cali","Junior","Santa Fe","Medellín","Deportes Tolima"],
+  liga_chilena:["Colo-Colo","Universidad de Chile","Universidad Católica","Audax Italiano","Cobresal","Deportes Iquique","O'Higgins","Unión Española"],
+  champions_league:["Arsenal","Atlético de Madrid","Aston Villa","Barcelona","Bayern München","Benfica","Borussia Dortmund","Brest","Celtic","Club Brugge","Feyenoord","Galatasaray","Inter Milan","Juventus","Bayer Leverkusen","Lille","Liverpool","Lazio","Manchester City","Milan","Monaco","PSG","PSV","Porto","Real Madrid","Sporting CP","Stuttgart","Tottenham"],
+  europa_league:["Ajax","Athletic Bilbao","Braga","Eintracht Frankfurt","Fenerbahçe","Ferencváros","Hoffenheim","LASK","Maccabi Tel Aviv","Malmo","Manchester United","Nice","Olympique Lyon","Olympique Marseille","Paok","Rangers","Roma","Tottenham","Twente","Union Berlin","Valencia"],
+  conference_league:["Basel","Betis","Bodø/Glimt","Chelsea","Fiorentina","Gent","Heidenheim","Legia","Lugano","Molde","Panathinaikos","Rapid Wien"],
+  premier_league:["Arsenal","Aston Villa","Brentford","Brighton","Chelsea","Crystal Palace","Everton","Fulham","Ipswich Town","Leicester","Liverpool","Manchester City","Manchester United","Newcastle","Nottingham Forest","Tottenham","West Ham","Wolves","Bournemouth","Southampton"],
+  la_liga:["Athletic Bilbao","Atlético de Madrid","Barcelona","Betis","Celta","Getafe","Girona","Las Palmas","Mallorca","Osasuna","Rayo Vallecano","Real Madrid","Real Sociedad","Sevilla","Valencia","Villarreal"],
+  bundesliga:["Augsburg","Bayer Leverkusen","Bayern München","Bochum","Borussia Dortmund","Borussia Mönchengladbach","Eintracht Frankfurt","Freiburg","Heidenheim","Hoffenheim","Köln","Leipzig","Mainz","Stuttgart","Union Berlin","Werder Bremen","Wolfsburg"],
+  serie_a_ita:["Atalanta","Bologna","Cagliari","Empoli","Fiorentina","Genoa","Hellas Verona","Inter","Juventus","Lazio","Lecce","Milan","Monza","Napoli","Roma","Torino","Udinese"],
+  ligue_1:["Clermont","Lens","Lille","Lyon","Marseille","Monaco","Montpellier","Nantes","Nice","PSG","Reims","Rennes","Strasbourg","Toulouse","Le Havre","Brest"],
+  eredivisie:["Ajax","AZ Alkmaar","Feyenoord","Groningen","NEC Nijmegen","PSV","SC Heerenveen","Twente","Utrecht"],
+  primeira_liga:["Benfica","Boavista","Braga","Estoril","Famalicão","Farense","Gil Vicente","Moreirense","Portimonense","Porto","Rio Ave","Santa Clara","Sporting CP","Vizela"],
+  super_lig:["Adana Demirspor","Beşiktaş","Fenerbahçe","Galatasaray","Kasımpaşa","Konyaspor","Sivasspor","Trabzonspor"],
+  saudi_league:["Al-Ahli","Al-Ettifaq","Al-Hilal","Al-Ittihad","Al-Nassr","Al-Qadsiah","Al-Shabab"],
+  mls:["Atlanta United","Austin FC","Charlotte FC","Chicago Fire","Colorado Rapids","Columbus Crew","D.C. United","FC Cincinnati","FC Dallas","Houston Dynamo","Inter Miami","LA Galaxy","LAFC","Minnesota United","Nashville SC","New England Revolution","New York City FC","New York Red Bulls","Orlando City","Philadelphia Union","Portland Timbers","Real Salt Lake","San Jose Earthquakes","Seattle Sounders","Sporting Kansas City","St. Louis City","Toronto FC","Vancouver Whitecaps"],
+  j_league:["Gamba Osaka","Kashima Antlers","Kashiwa Reysol","Kawasaki Frontale","Nagoya Grampus","Sanfrecce Hiroshima","Urawa Red Diamonds","Vissel Kobe","Yokohama F. Marinos"],
+  csl:["Beijing Guoan","Guangzhou FC","Shandong Taishan","Shanghai Port","Wuhan Three Towns"]
+};
+
+const TORNEIO_LABELS = {
+  copa_mundo_2026:"Copa do Mundo FIFA 2026",copa_mundo_2022:"Copa do Mundo FIFA 2022",
+  eliminatorias_sul:"Eliminatórias Sul-Americanas",eliminatorias_euro:"Eliminatórias UEFA",
+  copa_america:"Copa América",euro_2024:"UEFA Euro 2024",nations_league:"UEFA Nations League",
+  copa_africana:"Copa Africana de Nações",copa_asia:"Copa Ásia AFC",gold_cup:"CONCACAF Gold Cup",
+  amistoso_fifa:"Amistoso Internacional FIFA",brasileirao_a:"Brasileirão Série A",
+  brasileirao_b:"Brasileirão Série B",copa_brasil:"Copa do Brasil",supercopa_brasil:"Supercopa do Brasil",
+  carioca:"Campeonato Carioca",paulista:"Campeonato Paulista",mineiro:"Campeonato Mineiro",
+  gaucho:"Campeonato Gaúcho",libertadores:"Copa Libertadores",sul_americana:"Copa Sul-Americana",
+  recopa_sul:"Recopa Sul-Americana",liga_argentina:"Liga Profissional Argentina",
+  liga_colombiana:"Liga Betplay Colombiana",liga_chilena:"Primera División Chile",
+  champions_league:"UEFA Champions League",europa_league:"UEFA Europa League",
+  conference_league:"UEFA Conference League",premier_league:"Premier League",
+  la_liga:"La Liga",bundesliga:"Bundesliga",serie_a_ita:"Serie A (Itália)",
+  ligue_1:"Ligue 1",eredivisie:"Eredivisie",primeira_liga:"Primeira Liga (Portugal)",
+  super_lig:"Süper Lig",saudi_league:"Saudi Pro League",mls:"MLS",
+  j_league:"J-League",csl:"Super Liga Chinesa"
+};
+
+/* ═══════════ UI ═══════════ */
+function onTorneioChange() {
+  const sel = document.getElementById('torneio').value;
+  const times = (sel && TIMES_POR_TORNEIO[sel]) ? [...TIMES_POR_TORNEIO[sel]].sort() : [];
+  populateTeamSelects(times);
+  updateHeader();
+}
+
+function populateTeamSelects(times) {
+  ['time-a','time-b'].forEach(id => {
+    const s = document.getElementById(id);
+    const cur = s.value;
+    const placeholder = id === 'time-a' ? '— Time A —' : '— Time B —';
+    s.innerHTML = `<option value="">${placeholder}</option>`;
+    times.forEach(t => {
+      const o = document.createElement('option');
+      o.value = t; o.textContent = t;
+      if (t === cur) o.selected = true;
+      s.appendChild(o);
+    });
+  });
+}
+
+function updateHeader() {
+  const tv = document.getElementById('torneio').value;
+  const tA = document.getElementById('time-a').value;
+  const tB = document.getElementById('time-b').value;
+  const label = TORNEIO_LABELS[tv] || '';
+  const el = document.getElementById('match-header-label');
+  let txt = label;
+  if (tA && tB) txt += (txt ? ' — ' : '') + `${tA} × ${tB}`;
+  else if (tA || tB) txt += (txt ? ' — ' : '') + (tA || '?') + ' × ' + (tB || '?');
+  el.textContent = txt || 'AGUARDANDO CONFIGURAÇÃO';
+  document.getElementById('label-a').textContent = tA || 'TIME A';
+  document.getElementById('label-b').textContent = tB || 'TIME B';
+}
+
+/* ═══════════ MOTOR QUÂNTICO ═══════════ */
+function lerMetricas() {
+  const g = id => parseFloat(document.getElementById(id).value) || 0;
+  return {
+    minuto: g('m-minuto'), posse: g('m-posse'), xg: g('m-xg'), xa: g('m-xa'),
+    pressao: g('m-pressao'), finAlvo: g('m-fin-alvo'), finTotal: g('m-fin-total'),
+    ataques: g('m-ataques'), escanteios: g('m-escanteios'), cartoes: g('m-cartoes'),
+    formaA: g('m-forma-a'), formaB: g('m-forma-b')
+  };
+}
+
+function processarMatriz() {
+  const m = lerMetricas();
+  const posseNorm   = m.posse / 100;
+  const pressaoNorm = m.pressao / 100;
+  const efic        = m.finTotal > 0 ? m.finAlvo / m.finTotal : 0;
+  const volAtaque   = Math.min(m.ataques / 100, 1);
+  const bolas       = Math.min(m.escanteios / 15, 1);
+  const tensao      = Math.min(m.cartoes / 10, 1);
+  const formaRel    = (m.formaA - m.formaB) / 15;
+  const decay       = Math.exp(-m.minuto * 0.008);
+
+  const E_of  = (m.xg * 0.32) + (m.xa * 0.18) + (efic * 0.25);
+  const E_dom = (posseNorm * 0.20) + (pressaoNorm * 0.15) + (volAtaque * 0.10) + (bolas * 0.05);
+  const E_mom = formaRel * 0.35;
+  const E_ten = -tensao * 0.08;
+  const E_tmp = decay * 0.15;
+  const energia = E_of + E_dom + E_mom + E_ten + E_tmp;
+
+  const sig = x => 1 / (1 + Math.exp(-x * 2.1));
+  const p_a_raw = sig(energia);
+
+  const H = x => -(x * Math.log2(Math.max(x, 1e-9)) + (1-x) * Math.log2(Math.max(1-x, 1e-9)));
+  const entropia = H(p_a_raw);
+
+  const f_empate = entropia * 0.4 * (1 - Math.abs(m.minuto - 45) / 90);
+  const p_empate = Math.max(0.04, Math.min(0.40, f_empate));
+
+  let p_a = p_a_raw * (1 - p_empate);
+  let p_b = (1 - p_a_raw) * (1 - p_empate);
+  const tot = p_a + p_empate + p_b;
+  p_a = (p_a / tot) * 100;
+  const p_e = (p_empate / tot) * 100;
+  p_b = (p_b / tot) * 100;
+  const momentum = (formaRel + (posseNorm - 0.5) * 2) / 2;
+
+  document.getElementById('val-a').textContent = p_a.toFixed(1) + '%';
+  document.getElementById('bar-a').style.width = p_a.toFixed(1) + '%';
+  document.getElementById('val-e').textContent = p_e.toFixed(1) + '%';
+  document.getElementById('bar-e').style.width = p_e.toFixed(1) + '%';
+  document.getElementById('val-b').textContent = p_b.toFixed(1) + '%';
+  document.getElementById('bar-b').style.width = p_b.toFixed(1) + '%';
+  document.getElementById('q-energia').textContent  = energia.toFixed(3);
+  document.getElementById('q-entropia').textContent = entropia.toFixed(3);
+  document.getElementById('q-momentum').textContent = momentum.toFixed(3);
+
+  return { p_a: p_a.toFixed(1), p_e: p_e.toFixed(1), p_b: p_b.toFixed(1), energia: energia.toFixed(3), entropia: entropia.toFixed(3), momentum: momentum.toFixed(3) };
+}
+
+/* ═══════════ API STATUS ═══════════ */
+function checkApiKey() {
+  const key = document.getElementById('api-key').value.trim();
+
+  const dot = document.getElementById('api-status-dot');
+  const txt = document.getElementById('api-status-text');
+
+  const valid =
+      key.length > 20 &&
+      (
+          key.startsWith('AIza') ||
+          key.startsWith('AQ')
+      );
+
+  dot.className = 'status-dot ' + (valid ? 'online' : 'offline');
+  txt.textContent = valid ? 'API PRONTA' : 'API OFFLINE';
+}
+
+/* ═══════════ CHAT ═══════════ */
+let historico = [];
+
+function addMsg(html, tipo) {
+  const box = document.getElementById('chat-box');
+  const d = document.createElement('div');
+  d.className = `msg msg-${tipo}`;
+  d.innerHTML = html;
+  box.appendChild(d);
+  box.scrollTop = box.scrollHeight;
+  return d;
+}
+
+function chatKeyDown(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); enviarMensagem(); }
+}
+
+function buildSystemPrompt() {
+  const tv = document.getElementById('torneio').value;
+  const tA = document.getElementById('time-a').value || 'Time A';
+  const tB = document.getElementById('time-b').value || 'Time B';
+  const torneioLabel = TORNEIO_LABELS[tv] || 'Torneio não definido';
+  const m = lerMetricas();
+  const r = processarMatriz();
+  return `Você é o CHRONOS AI, um assistente analítico de elite especializado em trading esportivo quantitativo, modelos preditivos e análise estatística avançada.
+
+CONTEXTO DA PARTIDA:
+Torneio: ${torneioLabel}
+Confronto: ${tA} × ${tB}
+Minuto: ${m.minuto}' | Posse (${tA}): ${m.posse}%
+xG: ${m.xg} | xA: ${m.xa} | Pressão Territorial: ${m.pressao}/100
+Finalizações Alvo/Total: ${m.finAlvo}/${m.finTotal} | Ataques Perigosos: ${m.ataques}
+Escanteios: ${m.escanteios} | Cartões: ${m.cartoes}
+Forma ${tA}: ${m.formaA}/15 | Forma ${tB}: ${m.formaB}/15
+
+MATRIZ QUÂNTICA:
+Energia Ψ: ${r.energia} | Entropia H: ${r.entropia} | Momentum λ: ${r.momentum}
+Probabilidade ${tA}: ${r.p_a}% | Empate: ${r.p_e}% | ${tB}: ${r.p_b}%
+
+COMPORTAMENTO: Responda em português do Brasil. Tom cibernético, direto, analítico e profissional. Use os dados acima para fundamentar análises de trading esportivo.`;
+}
+
+async function enviarMensagem() {
+  const apiKey = document.getElementById('api-key').value.trim();
+  const input  = document.getElementById('chat-in');
+  const texto  = input.value.trim();
+
+  if (
+    !apiKey ||
+    apiKey.length < 20 ||
+    (
+        !apiKey.startsWith('AQ') &&
+        !apiKey.startsWith('AIza')
+    )
+) {
+    addMsg('<b>⚠ Sistema:</b> Cole uma API Key válida do Google AI Studio (AQ... ou AIza...).', 'error');
+    return;
+}
+  if (!texto) return;
+
+  addMsg(`<b>Você ▶</b> ${esc(texto)}`, 'user');
+  input.value = '';
+  historico.push({ role: 'user', parts: [{ text: texto }] });
+
+  const loadEl = addMsg('<b>Chronos AI ▶</b> <span class="typing-dots"><span></span><span></span><span></span></span>', 'ai');
+
+  try {
+    const res = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: historico,
+          systemInstruction: { parts: [{ text: buildSystemPrompt() }] },
+          generationConfig: { temperature: 0.75, topP: 0.95, maxOutputTokens: 1024 }
+        })
+      }
+    );
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err?.error?.message || `HTTP ${res.status}`);
+    }
+
+    const data = await res.json();
+    const txt = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+    if (!txt) throw new Error('Resposta vazia da API.');
+
+    historico.push({ role: 'model', parts: [{ text: txt }] });
+    loadEl.innerHTML = `<b>Chronos AI ▶</b><br>${esc(txt).replace(/\n/g,'<br>')}`;
+
+  } catch (err) {
+    loadEl.className = 'msg msg-error';
+    loadEl.innerHTML = `<b>⚠ Erro:</b><br>${esc(err.message)}<br><span style="font-size:10px;color:var(--text-muted)">Verifique a API Key e tente novamente.</span>`;
+  }
+}
+
+function autoAnalisar() {
+  const apiKey = document.getElementById('api-key').value.trim();
+  if (
+    !apiKey ||
+    apiKey.length < 20 ||
+    (
+        !apiKey.startsWith('AQ') &&
+        !apiKey.startsWith('AIza')
+    )
+) {
+    addMsg('<b>⚠ Sistema:</b> Cole uma API Key válida do Google AI Studio (AQ... ou AIza...).', 'error');
+    return;
+}
+  const tA = document.getElementById('time-a').value || 'Time A';
+  const tB = document.getElementById('time-b').value || 'Time B';
+  document.getElementById('chat-in').value = `Com base em todos os dados da partida atual (${tA} × ${tB}), execute uma análise quântica completa: qual o estado mais provável do jogo, qual a tendência de mercado e qual seria o movimento mais estratégico no trading esportivo agora?`;
+  enviarMensagem();
+}
+
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+window.addEventListener('DOMContentLoaded', () => { updateHeader(); processarMatriz(); });
+</script>
+</body>
+</html>
